@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+	@apply h-full m-0 p-0;
+}
+
+.el-collapse {
+	@apply border;
+}
+
+.el-collapse-item__content {
+	@apply p-0;
+}
+
+.el-form-item {
+	@apply my-4;
+}

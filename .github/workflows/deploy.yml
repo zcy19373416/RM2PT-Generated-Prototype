@@ -1,0 +1,26 @@
+name: deploy
+on: [push]
+jobs:
+  deploy-job: # 部署任务
+    runs-on: ubuntu-latest # 运行系统环境
+    steps: # 步骤
+      - uses: actions/checkout@v2 # 使用公共的 action
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: 安装依赖
+        run: npm install
+        working-directory: ./
+
+      - name: 前端项目打包
+        run: npm run build
+        working-directory: ./
+
+      - name: 打包镜像, 上传至 Docker Hub
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker build -t vue-builder-zcy2-atm .
+          docker tag vue-builder-zcy2-atm ${{ secrets.DOCKER_REPOSITORY }}:vue-builder-zcy2-atm
+          docker push ${{ secrets.DOCKER_REPOSITORY }}:vue-builder-zcy2-atm
+    
